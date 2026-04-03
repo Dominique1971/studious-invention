@@ -40,12 +40,15 @@ from direct.gui.OnscreenText import OnscreenText
 # Argument parsing (before window opens)
 # ---------------------------------------------------------------------------
 
+DEFAULT_START_HOUR: float = 12.0   # noon
+
+
 def _parse_args():
     p = argparse.ArgumentParser(description="City Driving Simulator")
     p.add_argument("--quality", default=None,
                    choices=["Low", "Medium", "High", "Ultra"])
     p.add_argument("--hour",    type=float, default=None,
-                   help="Starting hour 0-24 (default: noon)")
+                   help=f"Starting hour 0-24 (default: {DEFAULT_START_HOUR}, noon)")
     p.add_argument("--no-audio", action="store_true")
     p.add_argument("--debug-physics", action="store_true")
     return p.parse_args()
@@ -249,7 +252,7 @@ class CitySimulator(ShowBase):
         if self._wireframe:
             self.toggleWireframe()
 
-        start_hour = args.hour if args.hour is not None else 12.0
+        start_hour = args.hour if args.hour is not None else DEFAULT_START_HOUR
         self._lighting.set_hour(start_hour)
 
         print("[main] City Simulator started successfully.")
