@@ -527,7 +527,7 @@ class HUD:
         self.minimap.update(player_pos)
         self.vignette.update(damage)
         self.tod_display.update(hour, weather)
-        fps = self.base.taskMgr.getProfiler().getTotalTime() if False else (
+        fps = (
             globalClock.getAverageFrameRate()
             if hasattr(self.base, "taskMgr") else 60.0
         )
