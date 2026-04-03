@@ -471,7 +471,7 @@ class CitySimulator(ShowBase):
         if self._audio:
             self._audio.update_engine(
                 self._player.rpm, self._player.speed_kph,
-                braking=self._player.speed_kph > 20 and self._player.speed_kph < 21
+                braking=self._player.is_braking
             )
 
         # HUD

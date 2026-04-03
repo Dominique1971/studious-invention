@@ -262,11 +262,16 @@ class PlayerVehicle:
             ("arrow_left", False):("left",     False),
             ("arrow_right",True): ("right",    True),
             ("arrow_right",False):("right",    False),
-            ("w", True):  ("forward",  True),   ("w", False):  ("forward",  False),
-            ("s", True):  ("backward", True),   ("s", False):  ("backward", False),
-            ("a", True):  ("left",     True),   ("a", False):  ("left",     False),
-            ("d", True):  ("right",    True),   ("d", False):  ("right",    False),
-            ("space", True): ("brake", True),   ("space", False): ("brake", False),
+            ("w",     True):  ("forward",  True),
+            ("w",     False): ("forward",  False),
+            ("s",     True):  ("backward", True),
+            ("s",     False): ("backward", False),
+            ("a",     True):  ("left",     True),
+            ("a",     False): ("left",     False),
+            ("d",     True):  ("right",    True),
+            ("d",     False): ("right",    False),
+            ("space", True):  ("brake",    True),
+            ("space", False): ("brake",    False),
         }
         for (key, pressed), (action, val) in km.items():
             evt = key if pressed else f"{key}-up"
@@ -465,6 +470,10 @@ class PlayerVehicle:
     @property
     def speed_kph(self) -> float:
         return self._speed_kph
+
+    @property
+    def is_braking(self) -> bool:
+        return self._keys.get("brake", False) and self._speed_kph > 5.0
 
     @property
     def rpm(self) -> float:
