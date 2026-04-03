@@ -1,0 +1,71 @@
+quality_preset: "High"  # Options: Low, Medium, High, Ultra
+
+city:
+  width_km: 2.0
+  height_km: 2.0
+  seed: 42
+
+rendering:
+  shadows: true
+  ssao: true
+  bloom: true
+  dof: true
+  motion_blur: true
+  ssr: true
+  hdr: true
+  volumetric_fog: true
+
+graphics:
+  resolution: [1920, 1080]
+  fullscreen: false
+  vsync: true
+  fov: 75
+  target_fps: 60
+
+audio:
+  master_volume: 0.8
+  engine_volume: 1.0
+  ambient_volume: 0.6
+  music_volume: 0.4
+
+gameplay:
+  npc_vehicles: 50
+  npc_pedestrians: 200
+  traffic_density_multiplier: 1.0
+
+districts:
+  downtown:
+    size_ratio: 0.15
+    building_height_min: 60
+    building_height_max: 300
+    street_width: 20
+    density: 0.9
+  midtown:
+    size_ratio: 0.20
+    building_height_min: 20
+    building_height_max: 80
+    street_width: 18
+    density: 0.75
+  suburbs:
+    size_ratio: 0.30
+    building_height_min: 5
+    building_height_max: 15
+    street_width: 14
+    density: 0.5
+  industrial:
+    size_ratio: 0.20
+    building_height_min: 8
+    building_height_max: 25
+    street_width: 22
+    density: 0.6
+  park:
+    size_ratio: 0.15
+    building_height_min: 2
+    building_height_max: 5
+    street_width: 10
+    density: 0.1
+
+debug:
+  show_fps: false
+  show_wireframe: false
+  show_collision: false
