@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import math
 import enum
+from pathlib import Path
 from typing import Optional, List, Dict, Tuple, TYPE_CHECKING
 
 from panda3d.core import (
@@ -226,10 +227,17 @@ class PlayerVehicle:
 
     def _load_model(self):
         """Load vehicle model or fall back to coloured box."""
-        model_path = f"assets/kenney/car_kit/models/{self.vehicle_type.value}.egg"
-        try:
-            self._model_np = self.base.loader.loadModel(model_path)
-        except Exception:
+        asset_root = Path(__file__).resolve().parent / "assets" / "kenney" / "car_kit" / "models"
+        model_path = asset_root / f"{self.vehicle_type.value}.egg"
+        self._model_np = None
+
+        if model_path.exists():
+            try:
+                self._model_np = self.base.loader.loadModel(str(model_path))
+            except Exception:
+                self._model_np = None
+
+        if self._model_np is None or self._model_np.isEmpty():
             # Placeholder: coloured box
             from renderer import CityRenderer
             half = self.preset["chassis_half"]
@@ -327,7 +335,7 @@ class PlayerVehicle:
         # Apply to rear wheels (indices 2 and 3)
         sign = 1.0 if self._throttle >= 0 else -1.0
         for i in range(4):
-            self._vehicle.applyBrakes(p["brake_force"] * self._brake, i)
+            self._vehicle.setBrake(p["brake_force"] * self._brake, i)
         for i in (2, 3):
             self._vehicle.applyEngineForce(sign * engine_torque, i)
 

@@ -15,6 +15,7 @@ from __future__ import annotations
 import math
 import random
 import enum
+from pathlib import Path
 from typing import List, Optional, Tuple, Dict, TYPE_CHECKING
 
 from panda3d.core import (
@@ -220,10 +221,17 @@ class NPCVehicle:
             w.setRollInfluence(0.12)
 
     def _load_model(self):
-        path = f"assets/kenney/car_kit/models/{self.npc_type.value}.egg"
-        try:
-            self._model_np = self.base.loader.loadModel(path)
-        except Exception:
+        asset_root = Path(__file__).resolve().parent / "assets" / "kenney" / "car_kit" / "models"
+        path = asset_root / f"{self.npc_type.value}.egg"
+        self._model_np = None
+
+        if path.exists():
+            try:
+                self._model_np = self.base.loader.loadModel(str(path))
+            except Exception:
+                self._model_np = None
+
+        if self._model_np is None or self._model_np.isEmpty():
             from renderer import CityRenderer
             self._model_np = CityRenderer.make_colored_box(
                 self.base, Vec3(1.8, 4.0, 1.4), self._colour, f"npc_body_{id(self)}"
@@ -314,7 +322,7 @@ class NPCVehicle:
                 brake  = 0.0
 
         for i in range(4):
-            self._vehicle.applyBrakes(brake, i)
+            self._vehicle.setBrake(brake, i)
         for i in (2, 3):
             self._vehicle.applyEngineForce(engine, i)
         for i in (0, 1):

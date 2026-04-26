@@ -15,6 +15,7 @@ from __future__ import annotations
 import math
 import enum
 import random
+from pathlib import Path
 from typing import List, Optional, Tuple, Dict, TYPE_CHECKING
 
 from panda3d.core import (
@@ -147,10 +148,17 @@ class NPCPedestrian:
         self._body = body
 
     def _load_model(self):
-        path = f"assets/kenney/pedestrians/{self.ped_type.value}.egg"
-        try:
-            self._model = self.base.loader.loadModel(path)
-        except Exception:
+        asset_root = Path(__file__).resolve().parent / "assets" / "kenney" / "pedestrians"
+        path = asset_root / f"{self.ped_type.value}.egg"
+        self._model = None
+
+        if path.exists():
+            try:
+                self._model = self.base.loader.loadModel(str(path))
+            except Exception:
+                self._model = None
+
+        if self._model is None or self._model.isEmpty():
             # Capsule placeholder using a thin box
             from renderer import CityRenderer
             h = self._cfg["height"]

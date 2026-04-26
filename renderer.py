@@ -35,12 +35,14 @@ from panda3d.core import (
 from direct.filter.FilterManager import FilterManager
 from direct.showbase.ShowBase import ShowBase
 
+SHADER_DIR = Path(__file__).resolve().parent / "assets" / "shaders"
+
 # ---------------------------------------------------------------------------
 # GLSL shader sources (embedded strings to avoid external file dependency)
 # ---------------------------------------------------------------------------
 
 _VERT_PBR = """
-#version 430
+#version 330
 // PBR vertex shader
 in vec4 p3d_Vertex;
 in vec3 p3d_Normal;
@@ -72,7 +74,7 @@ void main() {
 """
 
 _FRAG_PBR = """
-#version 430
+#version 330
 // Metallic/Roughness PBR fragment shader
 
 in vec3 vPositionWorld;
@@ -177,7 +179,7 @@ void main() {
 """
 
 _FRAG_BLOOM_THRESHOLD = """
-#version 430
+#version 330
 uniform sampler2D sceneTexture;
 uniform float     threshold;
 in  vec2 texcoord;
@@ -190,7 +192,7 @@ void main() {
 """
 
 _FRAG_BLUR = """
-#version 430
+#version 330
 uniform sampler2D tex;
 uniform vec2      direction;
 in  vec2 texcoord;
@@ -208,7 +210,7 @@ void main() {
 """
 
 _FRAG_COMPOSITE = """
-#version 430
+#version 330
 uniform sampler2D sceneTex;
 uniform sampler2D bloomTex;
 uniform float     bloomStrength;
@@ -226,7 +228,7 @@ void main() {
 """
 
 _FRAG_SSAO = """
-#version 430
+#version 330
 uniform sampler2D depthTex;
 uniform sampler2D normalTex;
 uniform sampler2D noiseTex;
@@ -364,18 +366,30 @@ class CityRenderer:
         if msaa > 0:
             fb_props = FrameBufferProperties()
             fb_props.setMultisamples(msaa)
-            self.base.win.setFbProperties(fb_props)
+            if hasattr(self.base.win, "setFbProperties"):
+                self.base.win.setFbProperties(fb_props)
+            else:
+                print("[renderer] Framebuffer MSAA property changes are not supported on this Panda3D build; using scene multisampling only.")
 
     def _setup_render_state(self):
         # Backface culling, depth test are Panda3D defaults – just ensure AA
         if self.quality["msaa"] > 0:
             self.base.render.setAntialias(AntialiasAttrib.MMultisample)
 
-        # Texture anisotropy (set globally via loader options)
-        self.base.loader.setTextureAnisotropicDegree(self.quality["anisotropy"])
+        # Texture anisotropy (not all Panda3D loader builds expose a global setter)
+        if hasattr(self.base.loader, "setTextureAnisotropicDegree"):
+            self.base.loader.setTextureAnisotropicDegree(self.quality["anisotropy"])
+        else:
+            print("[renderer] Global anisotropic texture setting is unavailable on this Panda3D build; continuing with default texture filtering.")
 
-        # Enable Panda3D's auto shader (basic PBR via panda3d-gltf pipeline)
-        self.base.render.setShaderAuto()
+        # Keep a compatibility rendering path by default; Panda3D auto-shader can
+        # emit repeated profile errors on some driver/build combinations.
+        self._use_shader_auto = bool(self.render_cfg.get("shader_auto", False))
+        if self._use_shader_auto:
+            self.base.render.setShaderAuto()
+        else:
+            self.base.render.clearShader()
+            print("[renderer] Using compatibility rendering path without Panda3D auto shader.")
 
     # ------------------------------------------------------------------
     # PBR shader
@@ -383,7 +397,7 @@ class CityRenderer:
 
     def _build_pbr_shader(self):
         """Write GLSL sources to disk and compile."""
-        shader_dir = Path("assets/shaders")
+        shader_dir = SHADER_DIR
         shader_dir.mkdir(parents=True, exist_ok=True)
 
         vert_path = shader_dir / "pbr.vert"
@@ -396,7 +410,7 @@ class CityRenderer:
 
         try:
             self._pbr_shader = Shader.load(
-                Shader.SL_GLSL, str(vert_path), str(frag_path)
+                Shader.SL_GLSL, str(vert_path.resolve()), str(frag_path.resolve())
             )
         except Exception as exc:
             print(f"[renderer] PBR shader load failed ({exc}). Using auto shader.")
@@ -408,8 +422,10 @@ class CityRenderer:
             node.setShader(self._pbr_shader)
             node.setShaderInput("wetness", 0.0)
             node.setShaderInput("sunIntensity", 1.0)
-        else:
+        elif getattr(self, "_use_shader_auto", False):
             node.setShaderAuto()
+        else:
+            node.clearShader()
 
     # ------------------------------------------------------------------
     # Cascaded shadow maps
@@ -449,7 +465,7 @@ class CityRenderer:
                 colortex=color_tex, depthtex=depth_tex, auxtex=normal_tex
             )
 
-            ssao_shader_dir = Path("assets/shaders")
+            ssao_shader_dir = SHADER_DIR
             ssao_frag = ssao_shader_dir / "ssao.frag"
             if not ssao_frag.exists():
                 ssao_frag.write_text(_FRAG_SSAO)
@@ -464,7 +480,8 @@ class CityRenderer:
 
     def _setup_bloom(self):
         """Write bloom shaders and note setup for deferred composition."""
-        shader_dir = Path("assets/shaders")
+        shader_dir = SHADER_DIR
+        shader_dir.mkdir(parents=True, exist_ok=True)
         (shader_dir / "bloom_threshold.frag").write_text(_FRAG_BLOOM_THRESHOLD)
         (shader_dir / "blur.frag").write_text(_FRAG_BLUR)
         (shader_dir / "composite.frag").write_text(_FRAG_COMPOSITE)

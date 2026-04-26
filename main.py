@@ -212,7 +212,7 @@ class CitySimulator(ShowBase):
 
     def __init__(self, config: dict, args):
         super().__init__()
-        self.config = config
+        self.sim_config = config
         self.args   = args
 
         if args.quality:
@@ -276,11 +276,11 @@ class CitySimulator(ShowBase):
 
     def _init_renderer(self):
         from renderer import CityRenderer
-        self._renderer = CityRenderer(self, self.config)
+        self._renderer = CityRenderer(self, self.sim_config)
 
     def _init_city(self):
         from city_generator import CityGenerator
-        gen = CityGenerator(self.config)
+        gen = CityGenerator(self.sim_config)
         self._city_data = gen.generate()
 
         # Ground plane
@@ -298,12 +298,12 @@ class CitySimulator(ShowBase):
 
         # Sidewalk waypoints for pedestrians
         from city_generator import CityGenerator
-        _gen = CityGenerator(self.config)
+        _gen = CityGenerator(self.sim_config)
         self._sidewalk_waypoints = _gen.get_sidewalk_waypoints(self._city_data)
 
     def _init_lighting(self):
         from lighting import LightingSystem
-        self._lighting = LightingSystem(self, self._renderer, self.config)
+        self._lighting = LightingSystem(self, self._renderer, self.sim_config)
         self._lighting.register_street_lights(self._street_light_positions)
 
     def _init_player_vehicle(self):
@@ -318,9 +318,9 @@ class CitySimulator(ShowBase):
 
     def _init_npc_traffic(self):
         from npc_vehicle import spawn_traffic, get_traffic_light_system
-        count = self.config.get("gameplay", {}).get("npc_vehicles", 50)
+        count = self.sim_config.get("gameplay", {}).get("npc_vehicles", 50)
         import random
-        rng = random.Random(self.config.get("city", {}).get("seed", 42))
+        rng = random.Random(self.sim_config.get("city", {}).get("seed", 42))
         self._npc_vehicles = spawn_traffic(
             self, self._bullet_world, self._city_data.roads, count, rng
         )
@@ -329,9 +329,9 @@ class CitySimulator(ShowBase):
 
     def _init_pedestrians(self):
         from npc_pedestrian import spawn_pedestrians
-        count = self.config.get("gameplay", {}).get("npc_pedestrians", 200)
+        count = self.sim_config.get("gameplay", {}).get("npc_pedestrians", 200)
         import random
-        rng = random.Random(self.config.get("city", {}).get("seed", 42) + 1)
+        rng = random.Random(self.sim_config.get("city", {}).get("seed", 42) + 1)
         self._pedestrians = spawn_pedestrians(
             self, self._bullet_world, self._sidewalk_waypoints, count, rng
         )
@@ -340,7 +340,7 @@ class CitySimulator(ShowBase):
     def _init_weather(self):
         from weather import WeatherSystem
         self._weather = WeatherSystem(
-            self, self._renderer, None, self.config
+            self, self._renderer, None, self.sim_config
         )
 
     def _init_audio(self):
@@ -349,7 +349,7 @@ class CitySimulator(ShowBase):
             return
         try:
             from audio import AudioSystem
-            self._audio = AudioSystem(self, self.config)
+            self._audio = AudioSystem(self, self.sim_config)
             # Wire audio into weather
             self._weather.audio = self._audio
         except Exception as exc:
