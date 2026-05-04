@@ -1,0 +1,171 @@
+{
+  "generated_at": "2026-04-03T21:46:03Z",
+  "models": [],
+  "textures": [
+    {
+      "path": "kenney/car_kit/placeholder_albedo.png"
+    },
+    {
+      "path": "kenney/car_kit/placeholder_metallic.png"
+    },
+    {
+      "path": "kenney/car_kit/placeholder_normal.png"
+    },
+    {
+      "path": "kenney/car_kit/placeholder_roughness.png"
+    },
+    {
+      "path": "kenney/city_commercial/placeholder_albedo.png"
+    },
+    {
+      "path": "kenney/city_commercial/placeholder_metallic.png"
+    },
+    {
+      "path": "kenney/city_commercial/placeholder_normal.png"
+    },
+    {
+      "path": "kenney/city_commercial/placeholder_roughness.png"
+    },
+    {
+      "path": "kenney/city_roads/placeholder_albedo.png"
+    },
+    {
+      "path": "kenney/city_roads/placeholder_metallic.png"
+    },
+    {
+      "path": "kenney/city_roads/placeholder_normal.png"
+    },
+    {
+      "path": "kenney/city_roads/placeholder_roughness.png"
+    },
+    {
+      "path": "kenney/city_suburban/placeholder_albedo.png"
+    },
+    {
+      "path": "kenney/city_suburban/placeholder_metallic.png"
+    },
+    {
+      "path": "kenney/city_suburban/placeholder_normal.png"
+    },
+    {
+      "path": "kenney/city_suburban/placeholder_roughness.png"
+    },
+    {
+      "path": "kenney/nature_kit/placeholder_albedo.png"
+    },
+    {
+      "path": "kenney/nature_kit/placeholder_metallic.png"
+    },
+    {
+      "path": "kenney/nature_kit/placeholder_normal.png"
+    },
+    {
+      "path": "kenney/nature_kit/placeholder_roughness.png"
+    },
+    {
+      "path": "textures/asphalt/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/asphalt/placeholder_Color.png"
+    },
+    {
+      "path": "textures/asphalt/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/asphalt/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/asphalt/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/brick_wall/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/brick_wall/placeholder_Color.png"
+    },
+    {
+      "path": "textures/brick_wall/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/brick_wall/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/brick_wall/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/concrete_floor/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/concrete_floor/placeholder_Color.png"
+    },
+    {
+      "path": "textures/concrete_floor/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/concrete_floor/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/concrete_floor/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/glass/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/glass/placeholder_Color.png"
+    },
+    {
+      "path": "textures/glass/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/glass/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/glass/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/grass/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/grass/placeholder_Color.png"
+    },
+    {
+      "path": "textures/grass/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/grass/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/grass/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/metal_plates/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/metal_plates/placeholder_Color.png"
+    },
+    {
+      "path": "textures/metal_plates/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/metal_plates/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/metal_plates/placeholder_Roughness.png"
+    },
+    {
+      "path": "textures/pavement/placeholder_AmbientOcclusion.png"
+    },
+    {
+      "path": "textures/pavement/placeholder_Color.png"
+    },
+    {
+      "path": "textures/pavement/placeholder_Metalness.png"
+    },
+    {
+      "path": "textures/pavement/placeholder_NormalGL.png"
+    },
+    {
+      "path": "textures/pavement/placeholder_Roughness.png"
+    }
+  ]
+}

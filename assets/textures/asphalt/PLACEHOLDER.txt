@@ -1,0 +1,3 @@
+Texture 'asphalt' was not downloaded automatically.
+Source: https://ambientcg.com/get?file=Asphalt012_1K-PNG.zip
+Placeholder 1×1 textures have been created.

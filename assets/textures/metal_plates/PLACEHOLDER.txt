@@ -1,0 +1,3 @@
+Texture 'metal_plates' was not downloaded automatically.
+Source: https://ambientcg.com/get?file=MetalPlates002_1K-PNG.zip
+Placeholder 1×1 textures have been created.
